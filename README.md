@@ -64,8 +64,8 @@ Expected output:
 ```
 ✅ Reset successful.
 Wrapped observation shape: (25,)
-&nbsp;&nbsp;&nbsp;&nbsp;Taking random action: 2
-&nbsp;&nbsp;&nbsp;&nbsp;Reward from compute_paper_reward(): 3.72
+Taking random action: 2
+Reward from compute_paper_reward(): 3.72
 ```
 
 ## Training
