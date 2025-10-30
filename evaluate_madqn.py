@@ -5,7 +5,7 @@ import numpy as np
 from env_wrapper import MARLHighwayWrapper
 from agents.madqn import MADQN
 
-def evaluate(num_episodes=5, render=True):
+def evaluate(num_episodes=30, render=True):
     raw_env = gym.make("merge-v0", render_mode="human" if render else None)
     env = MARLHighwayWrapper(raw_env)
     obs, info = env.reset()
@@ -35,7 +35,7 @@ def evaluate(num_episodes=5, render=True):
         print(f"Episode {ep+1}: Reward = {total_reward:.2f}")
 
     env.close()
-    print(f"\n✅ Average Reward over {num_episodes} episodes: {np.mean(episode_rewards):.2f}")
+    print(f"\nDONE! Average Reward over {num_episodes} episodes: {np.mean(episode_rewards):.2f}")
 
 if __name__ == "__main__":
     evaluate()

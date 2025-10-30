@@ -1,5 +1,4 @@
-﻿# MARL_CAVs/env_wrappers.py
-import gymnasium as gym
+﻿import gymnasium as gym
 import numpy as np
 
 # constants from paper
