@@ -3,6 +3,8 @@
 **CAV-MARL-HighwayMerge** implements *Multi-Agent Reinforcement Learning* (MARL) algorithms — **MAPPO** and **MADQN** — for **cooperative ramp merging** of *Connected and Autonomous Vehicles (CAVs)* using the [HighwayEnv](https://github.com/Farama-Foundation/HighwayEnv) simulation environment.
 The project aims to reproduce and extend the results from the referenced research paper - *Cooperative merging for connected automated vehicles in mixed traffic: A multi-agent reinforcement learning approach* - to achieve efficient, collision-free merging behavior under mixed traffic scenarios.
 
+![Demo](assets/demo.gif)
+
 ---
 
 ## Overview
@@ -88,6 +90,14 @@ Both scripts will:
 python evaluate_MAPPO.py
 python evaluate_MADQN.py
 ```
+
+## Obtaining Results
+
+### Generate graphs and results
+```
+python plot_results.py
+```
+The graphs and results will be saved under the folder `results/`.
 
 ---
 
