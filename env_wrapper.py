@@ -1,4 +1,15 @@
-﻿import gymnasium as gym
+﻿"""
+env_wrapper.py defines a custom wrapper around the Highway Env environment to 
+make it compatible with MARL algorithsm and the reward definitions from the 
+research paper.
+It takes the base environment from HighwayEnv and redefines what each observation,
+action, and reward looks like for our agents.
+
+Basically, this file translates the raw simulator data into the format, reward
+and structure required by the MARL algorithms in the paper - MAPPO and MADQN.
+"""
+
+import gymnasium as gym
 import numpy as np
 
 # constants from paper
@@ -39,6 +50,10 @@ class MARLHighwayWrapper(gym.ObservationWrapper):
 
     def observation(self, obs):
         """
+        Here we extract fratuers like position, speed, heading and lane index of the ego
+        vehicle and nearby vehicles. Then flattens this data into a 1D vector so that the 
+        neural network can consume it easily.
+
         Convert underlying env observation into 25-d vector ordered as:
         [EV (5 features), FV (4f), SV (4f), PV (4f), LV (4f)] flattened and padded.
         Underlying obs is expected as an array shape (N, F) or dict — we handle arrays.
@@ -126,6 +141,11 @@ class MARLHighwayWrapper(gym.ObservationWrapper):
     # compute components exactly per paper eq (17)-(21) and group eq (22)-(23)
     def compute_paper_reward(self, ego, neighbors, info, env_state_obs=None):
         """
+        Implements the weighted reward described in the paper:
+        - safety
+        - efficiency
+        - comfort
+        using the a-weights.
         Inputs:
           - ego: object (vehicle) from unwrapped env or None
           - neighbors: list of neighbor vehicle objects (may contain None)

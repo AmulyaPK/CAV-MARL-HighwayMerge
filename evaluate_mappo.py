@@ -1,4 +1,6 @@
-﻿import torch
+﻿# Runs the trained MAPPO model in the environment to visualize how well it learned the ramp-merging behavior
+
+import torch
 import gymnasium as gym
 import highway_env
 import numpy as np
@@ -26,6 +28,7 @@ def evaluate(num_episodes=30, render=True):
 
     episode_rewards = []
 
+    # Runs evaluation episodes
     for ep in range(num_episodes):
         obs, info = env.reset()
         total_reward = 0
