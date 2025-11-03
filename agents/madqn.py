@@ -1,5 +1,4 @@
-﻿# MARL_CAVs/agents/madqn.py
-import torch
+﻿import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from agents.networks import DuelingQNetwork

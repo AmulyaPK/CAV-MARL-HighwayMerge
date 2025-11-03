@@ -86,11 +86,11 @@ def main():
     plt.plot(avg_rewards, color='orange', linewidth=2, label="Smoothed (50ep Avg)")
     plt.xlabel("Episode")
     plt.ylabel("Total Reward")
-    plt.title("MADQN Training Progress — Ramp Merging")
+    plt.title("MAPPO Training Progress — Ramp Merging")
     plt.legend()
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.tight_layout()
-    plt.savefig("results/madqn_training_curve.png", dpi=300)
+    plt.savefig("results/mappo_training_curve.png", dpi=300)
     plt.close()
 
     print("Saved training curve to results/madqn_training_curve.png\n")

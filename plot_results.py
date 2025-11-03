@@ -32,8 +32,8 @@ def smooth(x, sigma=3):
 
 # Plot average reward curves
 plt.figure(figsize=(10,6))
-plt.plot(mappo_data["avg"], label="MAPPO (Smoothed)", color="#4CAF50", linewidth=2)
-plt.plot(madqn_data["avg"], label="MADQN (Smoothed)", color="#FF9800", linewidth=2)
+plt.plot(mappo_data["avg"], label="MADQN (Smoothed)", color="#4CAF50", linewidth=2)
+plt.plot(madqn_data["avg"], label="MAPPO (Smoothed)", color="#FF9800", linewidth=2)
 
 plt.xlabel("Episode")
 plt.ylabel("Average Reward")
@@ -46,8 +46,8 @@ plt.show()
 
 # Plot collision rate
 plt.figure(figsize=(10,5))
-plt.plot(smooth(mappo_data["collisions"]), label="MAPPO", color="#4CAF50", linewidth=2)
-plt.plot(smooth(madqn_data["collisions"]), label="MADQN", color="#FF9800", linewidth=2)
+plt.plot(smooth(mappo_data["collisions"]), label="MADQN", color="#4CAF50", linewidth=2)
+plt.plot(smooth(madqn_data["collisions"]), label="MAPPO", color="#FF9800", linewidth=2)
 
 plt.xlabel("Episode")
 plt.ylabel("Collision Rate")
