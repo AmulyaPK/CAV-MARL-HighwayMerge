@@ -17,7 +17,7 @@ class MADQN:
         self.target_q = deepcopy(self.q)
         self.opt = optim.Adam(self.q.parameters(), lr=lr)
         self.gamma = gamma
-        self.buffer = ReplayBuffer(buffer_capacity, state_dim, device)
+        self.buffer = ReplayBuffer(state_dim, action_dim, capacity=buffer_capacity)
         self.batch_size = batch_size
         self.tau = tau
         self.step = 0
@@ -31,27 +31,36 @@ class MADQN:
             qvals = self.q(s)
         return int(qvals.argmax().item())
 
-    def update(self):
-        if len(self.buffer) < self.batch_size:
-            return None
-        batch = self.buffer.sample(self.batch_size)
-        states, actions, rewards, next_states, dones = batch['states'], batch['actions'], batch['rewards'], batch['next_states'], batch['dones']
+    def update(self, batch_size=64):
+        if len(self.buffer) < batch_size:
+            return
+
+        batch = self.buffer.sample(batch_size)
+        
+        # Convert numpy arrays → torch tensors
+        states = torch.tensor(batch["states"], dtype=torch.float32, device=self.device)
+        actions = torch.tensor(batch["actions"], dtype=torch.int64, device=self.device)
+        rewards = torch.tensor(batch["rewards"], dtype=torch.float32, device=self.device)
+        next_states = torch.tensor(batch["next_states"], dtype=torch.float32, device=self.device)
+        dones = torch.tensor(batch["dones"], dtype=torch.float32, device=self.device)
+
+        # Q-value updates
         q_vals = self.q(states).gather(1, actions.unsqueeze(1)).squeeze(1)
         with torch.no_grad():
-            # Double Q: use q for argmax then target_q for value
-            next_actions = self.q(next_states).argmax(dim=1, keepdim=True)
-            next_q = self.target_q(next_states).gather(1, next_actions).squeeze(1)
-            target = rewards + self.gamma * (1 - dones) * next_q
-        loss = F.mse_loss(q_vals, target)
-        self.opt.zero_grad()
-        loss.backward()
-        self.opt.step()
+            next_q_vals = self.target_q(next_states).max(1)[0]
+            targets = rewards + self.gamma * next_q_vals * (1 - dones)
 
-        # soft update
-        for p, tp in zip(self.q.parameters(), self.target_q.parameters()):
-            tp.data.copy_(self.tau * p.data + (1.0 - self.tau) * tp.data)
-        self.step += 1
+        loss = self.criterion(q_vals, targets)
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
+        # Soft update target network
+        for param, target_param in zip(self.q.parameters(), self.target_q.parameters()):
+            target_param.data.copy_(self.tau * param.data + (1 - self.tau) * target_param.data)
+
         return loss.item()
+
 
     def store(self, s, a, r, s2, done):
         self.buffer.push(s, a, r, s2, done)
